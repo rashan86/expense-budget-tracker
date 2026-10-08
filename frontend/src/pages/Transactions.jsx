@@ -13,7 +13,9 @@ import {
   Calendar,
   X,
   FileSpreadsheet,
-  FileText
+  FileText,
+  Receipt,
+  Sparkles
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -67,20 +69,27 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-6 rounded-3xl border border-slate-700/60">
-        <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Transactions History</h1>
-          <p className="text-xs text-slate-400 mt-1">
+    <div className="space-y-6 pb-16 animate-in fade-in duration-300">
+      {/* Header Banner with Background Visual */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card bg-banner-visual p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden">
+        {/* Glowing Aura */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <Receipt className="w-3.5 h-3.5" />
+            <span>Transaction Database</span>
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-tight">Transactions History</h1>
+          <p className="text-xs sm:text-sm text-slate-300">
             Search, filter, manage, and export all your income and expense records.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 relative z-10 shrink-0">
           <button
             onClick={onOpenExportModal}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all active:scale-95"
+            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 text-slate-200 text-xs font-semibold transition-all active:scale-95 shadow-md"
           >
             <Download className="w-4 h-4 text-blue-400" />
             <span>Export CSV/PDF</span>
@@ -97,7 +106,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
       </div>
 
       {/* Filter Toolbar */}
-      <div className="glass-card p-5 rounded-3xl border border-slate-700/60 space-y-4">
+      <div className="glass-card p-5 rounded-3xl border border-slate-700/70 space-y-4 shadow-xl">
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
@@ -115,7 +124,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
           <select
             value={filters.type}
             onChange={(e) => updateFilters({ type: e.target.value, page: 1 })}
-            className="px-4 py-2.5 rounded-xl glass-input text-xs font-medium bg-[#0F172A]"
+            className="px-4 py-2.5 rounded-xl glass-input text-xs font-medium bg-[#070A11]"
           >
             <option value="All">All Types</option>
             <option value="Income">Income</option>
@@ -126,7 +135,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
           <select
             value={filters.category}
             onChange={(e) => updateFilters({ category: e.target.value, page: 1 })}
-            className="px-4 py-2.5 rounded-xl glass-input text-xs font-medium bg-[#0F172A]"
+            className="px-4 py-2.5 rounded-xl glass-input text-xs font-medium bg-[#070A11]"
           >
             {CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>
@@ -137,7 +146,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
 
           <button
             type="submit"
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition-all"
+            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition-all shadow-md active:scale-95"
           >
             Search
           </button>
@@ -178,7 +187,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
       </div>
 
       {/* Transactions Table */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-700/60 space-y-4">
+      <div className="glass-card rounded-3xl p-6 border border-slate-700/70 space-y-4 shadow-xl">
         {loading ? (
           <div className="py-16 text-center text-slate-500 text-sm font-medium">
             Fetching transaction records...
@@ -204,7 +213,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-sm">
                 {transactions.map((tx) => (
-                  <tr key={tx._id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={tx._id} className="hover:bg-slate-800/50 transition-colors">
                     <td className="py-4 px-4 font-semibold text-slate-200">
                       <div>{tx.title}</div>
                       {tx.notes && <div className="text-xs font-normal text-slate-500 truncate max-w-xs">{tx.notes}</div>}
@@ -232,7 +241,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
                       {tx.paymentMethod || 'Cash'}
                     </td>
                     <td
-                      className={`py-4 px-4 text-right font-extrabold text-base ${
+                      className={`py-4 px-4 text-right font-black text-base ${
                         tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
                       }`}
                     >

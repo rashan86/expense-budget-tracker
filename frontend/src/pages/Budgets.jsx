@@ -44,30 +44,36 @@ const Budgets = ({ onOpenBudgetModal }) => {
   const totalSpent = budgetsData.totalSpent || 0;
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-card p-6 rounded-3xl border border-slate-700/60">
-        <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-            <PiggyBank className="w-6 h-6 text-amber-400" />
-            <span>Monthly Budget Management</span>
+    <div className="space-y-8 pb-16 animate-in fade-in duration-300">
+      {/* Header Banner with Background Visual */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 glass-card bg-banner-visual p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden">
+        {/* Glowing Aura */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <PiggyBank className="w-3.5 h-3.5" />
+            <span>Budget Control</span>
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-tight flex items-center space-x-2">
+            <span>Monthly Category Budgets</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Set monthly spending limits for each category to keep your finances in check.
+          <p className="text-xs sm:text-sm text-slate-300">
+            Set target monthly spending limits for each category to keep your finances on track.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 relative z-10 shrink-0">
           {/* Month & Year Select */}
-          <div className="flex items-center space-x-2 glass-input px-3 py-1.5 rounded-xl text-xs">
+          <div className="flex items-center space-x-2 glass-input px-3.5 py-2 rounded-xl text-xs">
             <Calendar className="w-4 h-4 text-blue-400" />
             <select
               value={selectedMonth}
               onChange={handleMonthChange}
-              className="bg-transparent font-bold text-white focus:outline-none"
+              className="bg-transparent font-bold text-white focus:outline-none cursor-pointer"
             >
               {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                <option key={m} value={m} className="bg-[#0F172A]">
+                <option key={m} value={m} className="bg-[#070A11]">
                   {new Date(0, m - 1).toLocaleString('default', { month: 'short' })}
                 </option>
               ))}
@@ -75,10 +81,10 @@ const Budgets = ({ onOpenBudgetModal }) => {
             <select
               value={selectedYear}
               onChange={handleYearChange}
-              className="bg-transparent font-bold text-white focus:outline-none"
+              className="bg-transparent font-bold text-white focus:outline-none cursor-pointer"
             >
               {[now.getFullYear() - 1, now.getFullYear(), now.getFullYear() + 1].map((y) => (
-                <option key={y} value={y} className="bg-[#0F172A]">
+                <option key={y} value={y} className="bg-[#070A11]">
                   {y}
                 </option>
               ))}
@@ -97,21 +103,21 @@ const Budgets = ({ onOpenBudgetModal }) => {
 
       {/* Summary Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="glass-card p-5 rounded-2xl border border-slate-700/60">
+        <div className="glass-card p-5 rounded-2xl border border-slate-700/60 shadow-xl">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Monthly Budget</p>
-          <h3 className="text-2xl font-extrabold text-white mt-1">
+          <h3 className="text-2xl font-black text-white mt-1">
             {currency}{totalBudgeted.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
         </div>
-        <div className="glass-card p-5 rounded-2xl border border-slate-700/60">
+        <div className="glass-card p-5 rounded-2xl border border-slate-700/60 shadow-xl">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Spent so far</p>
-          <h3 className="text-2xl font-extrabold text-amber-400 mt-1">
+          <h3 className="text-2xl font-black text-amber-400 mt-1">
             {currency}{totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
         </div>
-        <div className="glass-card p-5 rounded-2xl border border-slate-700/60">
+        <div className="glass-card p-5 rounded-2xl border border-slate-700/60 shadow-xl">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Overall Budget Health</p>
-          <h3 className={`text-2xl font-extrabold mt-1 ${totalSpent > totalBudgeted ? 'text-rose-400' : 'text-emerald-400'}`}>
+          <h3 className={`text-2xl font-black mt-1 ${totalSpent > totalBudgeted ? 'text-rose-400' : 'text-emerald-400'}`}>
             {totalBudgeted > 0 ? `${((totalSpent / totalBudgeted) * 100).toFixed(0)}% Used` : 'No limits set'}
           </h3>
         </div>
@@ -121,11 +127,11 @@ const Budgets = ({ onOpenBudgetModal }) => {
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-white flex items-center space-x-2">
           <Sparkles className="w-5 h-5 text-amber-400" />
-          <span>Category Budgets ({budgets.length})</span>
+          <span>Active Category Goals ({budgets.length})</span>
         </h3>
 
         {budgets.length === 0 ? (
-          <div className="glass-card rounded-3xl p-12 text-center space-y-3 border border-slate-700/60">
+          <div className="glass-card rounded-3xl p-12 text-center space-y-3 border border-slate-700/60 shadow-xl">
             <PiggyBank className="w-12 h-12 text-slate-600 mx-auto" />
             <h4 className="text-base font-bold text-slate-300">No monthly budgets set yet</h4>
             <p className="text-xs text-slate-400 max-w-sm mx-auto">
@@ -143,7 +149,7 @@ const Budgets = ({ onOpenBudgetModal }) => {
             {budgets.map((b) => (
               <div
                 key={b._id}
-                className="glass-card p-6 rounded-3xl border border-slate-700/60 space-y-4 hover:border-slate-600 transition-colors relative"
+                className="glass-card glass-card-hover p-6 rounded-3xl border border-slate-700/70 space-y-4 relative shadow-xl"
               >
                 {/* Header */}
                 <div className="flex items-center justify-between">
