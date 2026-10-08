@@ -16,14 +16,16 @@ import {
   Trash2,
   Calendar,
   Download,
-  Receipt
+  Receipt,
+  Sparkles,
+  ShieldCheck,
+  Zap
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModal, onEditTransaction }) => {
   const { user } = useAuth();
   const { transactions, summary, budgetsData, loading, deleteTransaction } = useFinance();
-  const [deleteId, setDeleteId] = useState(null);
 
   const currency = user?.currency || '$';
 
@@ -42,29 +44,38 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Welcome & Quick Action Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-card p-6 rounded-3xl border border-slate-700/60 relative overflow-hidden">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-            Hello, <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">{user?.name}</span> 👋
+    <div className="space-y-8 pb-16 animate-in fade-in duration-300">
+      {/* Welcome & Quick Action Hero Banner */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 glass-card bg-banner-visual p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden group">
+        {/* Glow ambient background aura */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="space-y-2 relative z-10">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            <Zap className="w-3.5 h-3.5" />
+            <span>Financial Command Center</span>
+          </div>
+
+          <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+            Welcome back, <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">{user?.name}</span> 👋
           </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1">
-            Here is your financial snapshot and recent activity performance.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+            Here is your live personal finance snapshot, budget compliance alerts, and spending breakdown.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 relative z-10 shrink-0">
           <button
             onClick={onOpenExportModal}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all active:scale-95"
+            className="flex items-center space-x-2 px-4 py-3 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 text-slate-200 text-xs font-bold transition-all shadow-lg active:scale-95"
           >
             <Download className="w-4 h-4 text-blue-400" />
             <span>Export Report</span>
           </button>
+
           <button
             onClick={() => onOpenTransactionModal()}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition-all active:scale-95"
+            className="flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Add Transaction</span>
@@ -74,20 +85,20 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
 
       {/* Budget Over-Limit Warning Alerts Banner */}
       {budgetAlerts.length > 0 && (
-        <div className="glass-card p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 flex items-start space-x-3 animate-in fade-in">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="glass-card p-5 rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-500/15 to-rose-500/10 flex items-start space-x-4 shadow-xl">
+          <AlertTriangle className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+            <h4 className="text-xs font-extrabold text-amber-300 uppercase tracking-wider">
               Budget Spending Alerts ({budgetAlerts.length})
             </h4>
-            <div className="mt-1 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {budgetAlerts.map((b) => (
                 <span
                   key={b._id}
-                  className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${
+                  className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold ${
                     b.status === 'exceeded'
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                   }`}
                 >
                   {b.category}: {b.percentage}% used ({currency}{b.spent} / {currency}{b.monthlyLimit})
@@ -97,9 +108,9 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
           </div>
           <Link
             to="/budgets"
-            className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 shrink-0"
+            className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 shrink-0 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20"
           >
-            <span>Manage</span>
+            <span>Manage Budgets</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -142,42 +153,48 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
         />
       </div>
 
-      {/* Charts Section */}
+      {/* Visual Analytics Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Doughnut Chart: Expense Breakdown */}
-        <div className="glass-card p-6 rounded-3xl border border-slate-700/60 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h3 className="text-base font-bold text-white">Expense Category Breakdown</h3>
-            <span className="text-xs text-slate-400 font-medium">All Time</span>
+        <div className="glass-card p-6 rounded-3xl border border-slate-700/70 space-y-4 shadow-xl">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span>Expense Category Distribution</span>
+            </h3>
+            <span className="text-xs text-slate-400 font-medium bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">All Time</span>
           </div>
           <ExpenseCategoryChart transactions={transactions} currency={currency} />
         </div>
 
         {/* Bar Chart: Income vs Expense Trend */}
-        <div className="glass-card p-6 rounded-3xl border border-slate-700/60 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h3 className="text-base font-bold text-white">Income vs Expense Comparison</h3>
-            <span className="text-xs text-slate-400 font-medium">Monthly History</span>
+        <div className="glass-card p-6 rounded-3xl border border-slate-700/70 space-y-4 shadow-xl">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-blue-400" />
+              <span>Monthly Cashflow Comparison</span>
+            </h3>
+            <span className="text-xs text-slate-400 font-medium bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">Monthly History</span>
           </div>
           <IncomeVsExpenseChart transactions={transactions} currency={currency} />
         </div>
       </div>
 
       {/* Recent Transactions Table */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-700/60 space-y-4">
+      <div className="glass-card rounded-3xl p-6 border border-slate-700/70 space-y-4 shadow-xl">
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div>
             <h3 className="text-base font-bold text-white flex items-center space-x-2">
-              <Receipt className="w-5 h-5 text-blue-400" />
-              <span>Recent Transactions</span>
+              <Receipt className="w-5 h-5 text-emerald-400" />
+              <span>Recent Activity Log</span>
             </h3>
-            <p className="text-xs text-slate-400">Latest recorded income and expenses</p>
+            <p className="text-xs text-slate-400">Latest recorded income and expense transactions</p>
           </div>
           <Link
             to="/transactions"
-            className="flex items-center space-x-1 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
+            className="flex items-center space-x-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20"
           >
-            <span>View All</span>
+            <span>View All Records</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -190,7 +207,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
             <p className="text-sm font-semibold text-slate-400">No transactions recorded yet</p>
             <button
               onClick={() => onOpenTransactionModal()}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition-all"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg"
             >
               Add First Record
             </button>
@@ -200,17 +217,17 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-3 px-4">Transaction</th>
-                  <th className="py-3 px-4">Category</th>
-                  <th className="py-3 px-4">Date</th>
-                  <th className="py-3 px-4">Payment</th>
-                  <th className="py-3 px-4 text-right">Amount</th>
-                  <th className="py-3 px-4 text-center">Actions</th>
+                  <th className="py-3.5 px-4">Transaction</th>
+                  <th className="py-3.5 px-4">Category</th>
+                  <th className="py-3.5 px-4">Date</th>
+                  <th className="py-3.5 px-4">Payment</th>
+                  <th className="py-3.5 px-4 text-right">Amount</th>
+                  <th className="py-3.5 px-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-sm">
-                {transactions.slice(0, 5).map((tx) => (
-                  <tr key={tx._id} className="hover:bg-slate-800/40 transition-colors">
+                {transactions.slice(0, 6).map((tx) => (
+                  <tr key={tx._id} className="hover:bg-slate-800/50 transition-colors">
                     <td className="py-3.5 px-4 font-semibold text-slate-200">
                       <div>{tx.title}</div>
                       {tx.notes && <div className="text-xs font-normal text-slate-500 truncate max-w-xs">{tx.notes}</div>}
@@ -226,7 +243,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
                     <td className="py-3.5 px-4 text-xs text-slate-400">
                       {tx.paymentMethod || 'Cash'}
                     </td>
-                    <td className={`py-3.5 px-4 text-right font-extrabold ${tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <td className={`py-3.5 px-4 text-right font-black ${tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {tx.type === 'income' ? '+' : '-'}{currency}{tx.amount.toFixed(2)}
                     </td>
                     <td className="py-3.5 px-4">

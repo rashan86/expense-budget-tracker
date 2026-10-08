@@ -15,26 +15,28 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-image: 
-    radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-    radial-gradient(at 85% 85%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+    linear-gradient(to bottom, rgba(7, 10, 17, 0.88), rgba(7, 10, 17, 0.94)),
+    url('/assets/dashboard_bg.jpg');
+  background-size: cover;
+  background-position: center;
   background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* Glassmorphism utility classes */
 .glass-panel {
-  background: rgba(13, 19, 33, 0.75);
+  background: rgba(13, 19, 33, 0.82);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
-  background: rgba(21, 30, 49, 0.65);
+  background: rgba(18, 26, 44, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
 }
 
 .glass-card-hover {
@@ -42,13 +44,13 @@ body {
 }
 
 .glass-card-hover:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5), 0 0 20px 0 rgba(16, 185, 129, 0.1);
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 25px 0 rgba(16, 185, 129, 0.15);
 }
 
 .glass-input {
-  background: rgba(11, 16, 28, 0.85);
+  background: rgba(11, 16, 28, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #F8FAFC;
   transition: all 0.25s ease;
@@ -62,17 +64,23 @@ body {
 
 /* Custom Background Visual Hero Utility */
 .bg-hero-visual {
-  background-image: linear-gradient(to bottom, rgba(7, 10, 17, 0.85), rgba(7, 10, 17, 0.95)), url('/assets/bg_hero.jpg');
+  background-image: linear-gradient(to bottom, rgba(7, 10, 17, 0.82), rgba(7, 10, 17, 0.95)), url('/assets/bg_hero.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .bg-hero-auth {
-  background-image: linear-gradient(to right, rgba(7, 10, 17, 0.92), rgba(7, 10, 17, 0.75)), url('/assets/bg_hero.jpg');
+  background-image: linear-gradient(to right, rgba(7, 10, 17, 0.94), rgba(7, 10, 17, 0.78)), url('/assets/bg_hero.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.bg-banner-visual {
+  background-image: linear-gradient(to right, rgba(13, 19, 33, 0.92), rgba(21, 30, 49, 0.85)), url('/assets/dashboard_bg.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 /* Glowing Accent Utilities */
