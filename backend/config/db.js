@@ -1,31 +1,41 @@
 require('./dnsFix');
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 let mongoServer;
 
 const connectDB = async () => {
+  const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/expense_tracker';
+  const isCloudUri = connStr.includes('mongodb+srv://') || (!connStr.includes('127.0.0.1') && !connStr.includes('localhost'));
+  const maskedConn = connStr.replace(/:([^:@]{3,})@/, ':****@');
+
   try {
-    const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/expense_tracker';
-    
-    // Attempt connecting to specified MongoDB server with 2s timeout
+    console.log(`[MongoDB] Connecting to database (${isCloudUri ? 'Cloud Atlas' : 'Local'})...`);
+
+    // Cloud Atlas requires longer timeout (15s) for SSL & replica set negotiation
     await mongoose.connect(connStr, {
-      serverSelectionTimeoutMS: 2000,
+      serverSelectionTimeoutMS: isCloudUri ? 15000 : 3000,
     });
-    console.log(`MongoDB Connected: ${mongoose.connection.host}`);
+
+    console.log(`[MongoDB] Successfully connected! Host: ${mongoose.connection.host} | DB: ${mongoose.connection.name}`);
+    return mongoose.connection;
   } catch (error) {
-    console.warn(`Local MongoDB server not detected on port 27017. Starting In-Memory MongoDB instance...`);
-    
+    console.error(`[MongoDB Error] Failed to connect to ${maskedConn}: ${error.message}`);
+    console.warn(`[MongoDB Warning] Starting temporary In-Memory MongoDB instance fallback...`);
+
     try {
       const { MongoMemoryServer } = require('mongodb-memory-server');
       mongoServer = await MongoMemoryServer.create();
       const mongoUri = mongoServer.getUri();
       await mongoose.connect(mongoUri);
-      console.log(`In-Memory MongoDB Started & Connected: ${mongoUri}`);
+      console.log(`[MongoDB Fallback] In-Memory MongoDB Started & Connected: ${mongoUri}`);
 
       // Auto-seed demo account and sample transactions
       await seedDemoData();
+      return mongoose.connection;
     } catch (memError) {
-      console.error(`Failed to launch In-Memory MongoDB: ${memError.message}`);
+      console.error(`[MongoDB Fatal] Failed to launch In-Memory MongoDB: ${memError.message}`);
+      throw memError;
     }
   }
 };

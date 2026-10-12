@@ -3,12 +3,18 @@ const { Resolver } = require('dns');
 
 // Bypass local router / ISP DNS blocking for MongoDB Atlas
 try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch (e) {}
+
+try {
+  if (dns.promises && dns.promises.setServers) {
+    dns.promises.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+  }
 } catch (e) {}
 
 const customResolver = new Resolver();
 try {
-  customResolver.setServers(['8.8.8.8', '1.1.1.1']);
+  customResolver.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
 } catch (e) {}
 
 const origLookup = dns.lookup;
