@@ -1,3 +1,4 @@
+require('./dnsFix');
 const mongoose = require('mongoose');
 
 let mongoServer;
