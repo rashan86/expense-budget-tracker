@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Download, FileSpreadsheet, FileText, Calendar, Filter } from 'lucide-react';
+import { X, Download, FileSpreadsheet, FileText, Calendar, Filter, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const CATEGORIES = [
   'All',
@@ -28,21 +28,51 @@ const ExportModal = ({ isOpen, onClose, onExportCSV, onExportPDF }) => {
   });
 
   const [loadingType, setLoadingType] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   if (!isOpen) return null;
 
   const handleExportCSV = async () => {
-    setLoadingType('csv');
-    await onExportCSV(filter);
-    setLoadingType(null);
-    onClose();
+    try {
+      setLoadingType('csv');
+      setErrorMessage(null);
+      const res = await onExportCSV(filter);
+      setLoadingType(null);
+      if (res?.success) {
+        setSuccessMessage('CSV spreadsheet downloaded to your Downloads folder!');
+        setTimeout(() => {
+          setSuccessMessage(null);
+          onClose();
+        }, 2000);
+      } else {
+        setErrorMessage(res?.error || 'CSV export failed');
+      }
+    } catch (err) {
+      setLoadingType(null);
+      setErrorMessage(err.message || 'CSV export failed');
+    }
   };
 
   const handleExportPDF = async () => {
-    setLoadingType('pdf');
-    await onExportPDF(filter);
-    setLoadingType(null);
-    onClose();
+    try {
+      setLoadingType('pdf');
+      setErrorMessage(null);
+      const res = await onExportPDF(filter);
+      setLoadingType(null);
+      if (res?.success) {
+        setSuccessMessage('PDF report downloaded to your Downloads folder!');
+        setTimeout(() => {
+          setSuccessMessage(null);
+          onClose();
+        }, 2000);
+      } else {
+        setErrorMessage(res?.error || 'PDF export failed');
+      }
+    } catch (err) {
+      setLoadingType(null);
+      setErrorMessage(err.message || 'PDF export failed');
+    }
   };
 
   return (
@@ -130,26 +160,45 @@ const ExportModal = ({ isOpen, onClose, onExportCSV, onExportPDF }) => {
             </div>
           </div>
 
+          {/* Notifications */}
+          {successMessage && (
+            <div className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center space-x-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <span>{successMessage}</span>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-semibold flex items-center space-x-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
           {/* Download Buttons */}
           <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-800">
             <button
               onClick={handleExportCSV}
               disabled={loadingType !== null}
-              className="flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl bg-emerald-600/20 border border-emerald-500/30 hover:bg-emerald-600/30 text-emerald-400 font-bold text-xs transition-all active:scale-95"
+              className="flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl bg-emerald-600/20 border border-emerald-500/30 hover:bg-emerald-600/30 text-emerald-400 font-bold text-xs transition-all active:scale-95 disabled:opacity-50"
             >
               <FileSpreadsheet className="w-4 h-4" />
-              <span>{loadingType === 'csv' ? 'Exporting...' : 'Export CSV'}</span>
+              <span>{loadingType === 'csv' ? 'Generating CSV...' : 'Export CSV'}</span>
             </button>
 
             <button
               onClick={handleExportPDF}
               disabled={loadingType !== null}
-              className="flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl bg-rose-600/20 border border-rose-500/30 hover:bg-rose-600/30 text-rose-400 font-bold text-xs transition-all active:scale-95"
+              className="flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl bg-rose-600/20 border border-rose-500/30 hover:bg-rose-600/30 text-rose-400 font-bold text-xs transition-all active:scale-95 disabled:opacity-50"
             >
               <FileText className="w-4 h-4" />
-              <span>{loadingType === 'pdf' ? 'Exporting...' : 'Export PDF'}</span>
+              <span>{loadingType === 'pdf' ? 'Generating PDF...' : 'Export PDF'}</span>
             </button>
           </div>
+
+          <p className="text-[11px] text-center text-slate-500 pt-1">
+            📁 Exported files automatically save into your browser's <span className="text-slate-300 font-medium">Downloads</span> folder.
+          </p>
         </div>
       </div>
     </div>
