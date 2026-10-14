@@ -51,7 +51,7 @@ const AppLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 font-sans selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-transparent text-slate-100 font-sans selection:bg-blue-500 selection:text-white">
       {isAuthenticated && <Navbar onOpenTransactionModal={() => handleOpenTransactionModal()} />}
 
       <main className={isAuthenticated ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6' : ''}>
