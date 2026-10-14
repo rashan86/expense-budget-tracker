@@ -197,7 +197,7 @@ export const FinanceProvider = ({ children }) => {
 
       const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      const fileName = `transactions_${Date.now()}.pdf`;
+      const fileName = `transactions_report_${Date.now()}.pdf`;
 
       // Trigger file download to Downloads folder
       const link = document.createElement('a');
@@ -207,8 +207,12 @@ export const FinanceProvider = ({ children }) => {
       link.click();
       link.remove();
 
-      // Also automatically open the generated PDF in a new tab for immediate viewing
-      window.open(url, '_blank');
+      // Attempt to open in a new tab
+      try {
+        window.open(url, '_blank');
+      } catch (err) {
+        console.warn('Popup blocked:', err);
+      }
 
       return { success: true, url, fileName };
     } catch (err) {

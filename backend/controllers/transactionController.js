@@ -445,7 +445,7 @@ const exportPDF = async (req, res, next) => {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=transactions_report_${Date.now()}.pdf`
+      `inline; filename=transactions_report_${Date.now()}.pdf`
     );
 
     doc.pipe(res);
