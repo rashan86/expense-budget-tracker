@@ -12,7 +12,6 @@ import {
   Receipt,
   PiggyBank,
   BarChart3,
-  Target,
   Settings
 } from 'lucide-react';
 import ProfileModal from './ProfileModal';
@@ -29,7 +28,6 @@ const Navbar = ({ onOpenTransactionModal }) => {
     { name: 'Transactions', path: '/transactions', icon: Receipt },
     { name: 'Budgets', path: '/budgets', icon: PiggyBank },
     { name: 'Analytics', path: '/analytics', icon: BarChart3 },
-    { name: 'Goals & Notes', path: '/goals', icon: Target },
   ];
 
   return (

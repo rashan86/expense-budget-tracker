@@ -52,11 +52,25 @@ const StatCard = ({ title, amount, currency = '$', icon: Icon, type = 'neutral',
     ? `${currency}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     : amount;
 
+  const getAmbientGlow = () => {
+    switch (type) {
+      case 'income':
+        return 'chart-watermark-glow-emerald';
+      case 'expense':
+        return 'chart-watermark-glow-rose';
+      case 'warning':
+        return 'chart-watermark-glow-amber';
+      case 'balance':
+      default:
+        return 'chart-watermark-glow-indigo';
+    }
+  };
+
   return (
     <div
-      className={`glass-card p-6 rounded-2xl bg-gradient-to-br ${style.bg} border ${style.border} transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group`}
+      className={`crystal-card p-6 rounded-2xl border ${style.border} transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group shadow-xl`}
     >
-      <div className="flex items-center justify-between">
+      <div className="relative z-10 flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">
             {title}
@@ -74,7 +88,7 @@ const StatCard = ({ title, amount, currency = '$', icon: Icon, type = 'neutral',
       </div>
 
       {progress !== undefined && (
-        <div className="mt-4 pt-3 border-t border-slate-800/60">
+        <div className="relative z-10 mt-4 pt-3 border-t border-slate-800/60">
           <div className="flex justify-between text-xs font-semibold mb-1">
             <span className="text-slate-400">Monthly Budget Target</span>
             <span className={style.text}>{progress.toFixed(0)}%</span>
