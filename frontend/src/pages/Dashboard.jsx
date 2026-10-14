@@ -21,7 +21,10 @@ import {
   ShieldCheck,
   Zap,
   BarChart3,
-  PieChart
+  PieChart,
+  Target,
+  StickyNote,
+  Activity
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -195,6 +198,67 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
           </div>
           <div className="relative z-10">
             <IncomeVsExpenseChart transactions={transactions} currency={currency} />
+          </div>
+        </div>
+      </div>
+
+      {/* Strategic Hub: Goals & Financial Notes Quick Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="chart-glass-card p-6 rounded-3xl space-y-4">
+          <div className="chart-watermark-grid" />
+          <div className="chart-watermark-glow-emerald" />
+          <div className="relative z-10 flex items-center justify-between pb-3 border-b border-slate-800/80">
+            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <span className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                <Target className="w-4 h-4" />
+              </span>
+              <span>Category Savings Goals</span>
+            </h3>
+            <Link
+              to="/goals"
+              className="text-xs text-emerald-300 font-bold hover:text-emerald-200 flex items-center space-x-1"
+            >
+              <span>Manage Goals</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="relative z-10 space-y-3">
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Track category milestones, emergency funds, and vacation budgets with real-time deposit tracking and countdowns.
+            </p>
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <span className="text-xs text-slate-400">Emergency Fund Target</span>
+              <span className="text-xs font-bold text-emerald-400">69% Funded</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="chart-glass-card p-6 rounded-3xl space-y-4">
+          <div className="chart-watermark-grid" />
+          <div className="chart-watermark-glow-indigo" />
+          <div className="relative z-10 flex items-center justify-between pb-3 border-b border-slate-800/80">
+            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <span className="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                <StickyNote className="w-4 h-4" />
+              </span>
+              <span>Financial Notes & Audit Log</span>
+            </h3>
+            <Link
+              to="/goals"
+              className="text-xs text-indigo-300 font-bold hover:text-indigo-200 flex items-center space-x-1"
+            >
+              <span>Open Hub</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="relative z-10 space-y-3">
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Pin strategic memo cards, subscription renewal reminders, and audit all incoming/outgoing transactions.
+            </p>
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <span className="text-xs text-slate-400">Activity Audit Trail</span>
+              <span className="text-xs font-bold text-indigo-400">Active Live Feed</span>
+            </div>
           </div>
         </div>
       </div>

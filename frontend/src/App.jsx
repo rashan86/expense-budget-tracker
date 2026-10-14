@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Budgets from './pages/Budgets';
 import Analytics from './pages/Analytics';
+import GoalsAndNotes from './pages/GoalsAndNotes';
 
 const AppLayout = () => {
   const { isAuthenticated, user } = useAuth();
@@ -90,6 +91,7 @@ const AppLayout = () => {
               }
             />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/goals" element={<GoalsAndNotes />} />
           </Route>
 
           {/* Fallback Catch-all Route */}
