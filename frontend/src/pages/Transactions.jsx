@@ -45,6 +45,45 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
 
   const [searchInput, setSearchInput] = useState(filters.search || '');
 
+  const getLocalDateString = (d = new Date()) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleQuickDateFilter = (preset) => {
+    const now = new Date();
+    let startDate = '';
+    let endDate = '';
+
+    if (preset === 'today') {
+      const todayStr = getLocalDateString(now);
+      startDate = todayStr;
+      endDate = todayStr;
+    } else if (preset === 'this_month') {
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      startDate = `${year}-${month}-01`;
+      const lastDay = new Date(year, now.getMonth() + 1, 0).getDate();
+      endDate = `${year}-${month}-${String(lastDay).padStart(2, '0')}`;
+    } else if (preset === 'last_30_days') {
+      const past = new Date();
+      past.setDate(past.getDate() - 30);
+      startDate = getLocalDateString(past);
+      endDate = getLocalDateString(now);
+    } else if (preset === 'this_year') {
+      const year = now.getFullYear();
+      startDate = `${year}-01-01`;
+      endDate = `${year}-12-31`;
+    } else if (preset === 'all') {
+      startDate = '';
+      endDate = '';
+    }
+
+    updateFilters({ startDate, endDate, page: 1 });
+  };
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     updateFilters({ search: searchInput, page: 1 });
@@ -163,26 +202,48 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
           )}
         </form>
 
-        {/* Date Range Row */}
-        <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-800/60 text-xs">
-          <span className="text-slate-400 font-semibold flex items-center space-x-1">
-            <Calendar className="w-3.5 h-3.5 text-blue-400" />
-            <span>Date Range:</span>
-          </span>
+        {/* Date Range Row & Quick Preset Pills */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/60 text-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-slate-400 font-semibold flex items-center space-x-1 mr-1">
+              <Calendar className="w-3.5 h-3.5 text-blue-400" />
+              <span>Date Range:</span>
+            </span>
 
-          <input
-            type="date"
-            value={filters.startDate}
-            onChange={(e) => updateFilters({ startDate: e.target.value, page: 1 })}
-            className="px-3 py-1.5 rounded-lg glass-input text-xs"
-          />
-          <span className="text-slate-500">to</span>
-          <input
-            type="date"
-            value={filters.endDate}
-            onChange={(e) => updateFilters({ endDate: e.target.value, page: 1 })}
-            className="px-3 py-1.5 rounded-lg glass-input text-xs"
-          />
+            <input
+              type="date"
+              value={filters.startDate}
+              onChange={(e) => updateFilters({ startDate: e.target.value, page: 1 })}
+              className="px-3 py-1.5 rounded-lg glass-input text-xs"
+            />
+            <span className="text-slate-500">to</span>
+            <input
+              type="date"
+              value={filters.endDate}
+              onChange={(e) => updateFilters({ endDate: e.target.value, page: 1 })}
+              className="px-3 py-1.5 rounded-lg glass-input text-xs"
+            />
+          </div>
+
+          {/* Quick Date Range Pills */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {[
+              { id: 'today', label: 'Today' },
+              { id: 'this_month', label: 'This Month' },
+              { id: 'last_30_days', label: 'Last 30 Days' },
+              { id: 'this_year', label: 'This Year' },
+              { id: 'all', label: 'All' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => handleQuickDateFilter(p.id)}
+                className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-[11px] font-semibold text-slate-300 hover:text-white transition-all active:scale-95"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -245,7 +306,7 @@ const Transactions = ({ onOpenTransactionModal, onOpenExportModal, onEditTransac
                         tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
                       }`}
                     >
-                      {tx.type === 'income' ? '+' : '-'}{currency}{tx.amount.toFixed(2)}
+                      {tx.type === 'income' ? '+' : '-'}{currency}{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex items-center justify-center space-x-2">

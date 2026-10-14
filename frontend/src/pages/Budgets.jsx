@@ -160,7 +160,7 @@ const Budgets = ({ onOpenBudgetModal }) => {
                     <div>
                       <h4 className="text-base font-bold text-white">{b.category}</h4>
                       <p className="text-xs text-slate-400">
-                        {currency}{b.spent.toFixed(2)} spent of {currency}{b.monthlyLimit.toFixed(2)} limit
+                        {currency}{b.spent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} spent of {currency}{b.monthlyLimit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} limit
                       </p>
                     </div>
                   </div>
@@ -217,7 +217,7 @@ const Budgets = ({ onOpenBudgetModal }) => {
                 {/* Status Badge */}
                 <div className="flex items-center justify-between pt-2 text-xs">
                   <span className="text-slate-400 font-medium">
-                    Remaining: <span className="font-bold text-white">{currency}{b.remaining.toFixed(2)}</span>
+                    Remaining: <span className="font-bold text-white">{currency}{b.remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </span>
 
                   {b.status === 'exceeded' && (

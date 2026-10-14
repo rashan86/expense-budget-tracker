@@ -462,7 +462,7 @@ const exportPDF = async (req, res, next) => {
     });
 
     doc.fontSize(11).fillColor('#0F172A')
-      .text(`Total Income: ${req.user.currency || '$'}${totalInc.toFixed(2)}  |  Total Expenses: ${req.user.currency || '$'}${totalExp.toFixed(2)}  |  Net Balance: ${req.user.currency || '$'}${(totalInc - totalExp).toFixed(2)}`)
+      .text(`Total Income: ${req.user.currency || '$'}${totalInc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}  |  Total Expenses: ${req.user.currency || '$'}${totalExp.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}  |  Net Balance: ${req.user.currency || '$'}${(totalInc - totalExp).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
       .moveDown(1);
 
     const table = {
@@ -473,7 +473,7 @@ const exportPDF = async (req, res, next) => {
         t.type.toUpperCase(),
         t.title,
         t.category,
-        `${req.user.currency || '$'}${t.amount.toFixed(2)}`,
+        `${req.user.currency || '$'}${t.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
         t.paymentMethod || 'Cash',
       ]),
     };

@@ -25,13 +25,22 @@ const EXPENSE_CATEGORIES = [
 
 const PAYMENT_METHODS = ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Other'];
 
+// Helper to get local date in YYYY-MM-DD format avoiding UTC shift bugs
+const getLocalDateString = (dateInput) => {
+  const d = dateInput ? new Date(dateInput) : new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const TransactionModal = ({ isOpen, onClose, onSubmit, initialData = null, currency = '$' }) => {
   const [formData, setFormData] = useState({
     type: 'expense',
     title: '',
     amount: '',
     category: EXPENSE_CATEGORIES[0],
-    date: new Date().toISOString().split('T')[0],
+    date: getLocalDateString(),
     paymentMethod: 'Cash',
     notes: '',
   });
@@ -46,7 +55,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData = null, curre
         title: initialData.title || '',
         amount: initialData.amount || '',
         category: initialData.category || (initialData.type === 'income' ? INCOME_CATEGORIES[0] : EXPENSE_CATEGORIES[0]),
-        date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        date: getLocalDateString(initialData.date),
         paymentMethod: initialData.paymentMethod || 'Cash',
         notes: initialData.notes || '',
       });
@@ -56,7 +65,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData = null, curre
         title: '',
         amount: '',
         category: EXPENSE_CATEGORIES[0],
-        date: new Date().toISOString().split('T')[0],
+        date: getLocalDateString(),
         paymentMethod: 'Cash',
         notes: '',
       });

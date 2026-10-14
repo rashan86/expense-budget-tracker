@@ -34,6 +34,11 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
   const totalSpent = budgetsData.totalSpent || 0;
   const budgetProgress = totalBudgeted > 0 ? (totalSpent / totalBudgeted) * 100 : 0;
 
+  // Calculate real-world financial KPI: Savings Rate %
+  const savingsRate = summary.totalIncome > 0
+    ? Math.max(0, ((summary.balance / summary.totalIncome) * 100)).toFixed(1)
+    : 0;
+
   // Filter budget alert warnings
   const budgetAlerts = budgetsData.budgets?.filter((b) => b.status === 'warning' || b.status === 'exceeded') || [];
 
@@ -101,7 +106,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
                       : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                   }`}
                 >
-                  {b.category}: {b.percentage}% used ({currency}{b.spent} / {currency}{b.monthlyLimit})
+                  {b.category}: {b.percentage}% used ({currency}{b.spent.toLocaleString()} / {currency}{b.monthlyLimit.toLocaleString()})
                 </span>
               ))}
             </div>
@@ -140,7 +145,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
           currency={currency}
           icon={Scale}
           type={summary.balance >= 0 ? 'balance' : 'expense'}
-          subtitle={summary.balance >= 0 ? 'Positive Cash Flow' : 'Negative Cash Flow'}
+          subtitle={summary.balance >= 0 ? `Positive (${savingsRate}% Savings Rate)` : 'Deficit (Spending > Income)'}
         />
         <StatCard
           title="Monthly Budget Limit"
@@ -149,7 +154,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
           icon={PiggyBank}
           type="warning"
           progress={budgetProgress}
-          subtitle={`${currency}${totalSpent.toFixed(2)} spent out of ${currency}${totalBudgeted.toFixed(2)}`}
+          subtitle={`${currency}${totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2 })} spent out of ${currency}${totalBudgeted.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
         />
       </div>
 
@@ -244,7 +249,7 @@ const Dashboard = ({ onOpenTransactionModal, onOpenBudgetModal, onOpenExportModa
                       {tx.paymentMethod || 'Cash'}
                     </td>
                     <td className={`py-3.5 px-4 text-right font-black ${tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {tx.type === 'income' ? '+' : '-'}{currency}{tx.amount.toFixed(2)}
+                      {tx.type === 'income' ? '+' : '-'}{currency}{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center justify-center space-x-2">

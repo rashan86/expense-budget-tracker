@@ -11,14 +11,17 @@ import {
   LayoutDashboard,
   Receipt,
   PiggyBank,
-  BarChart3
+  BarChart3,
+  Settings
 } from 'lucide-react';
+import ProfileModal from './ProfileModal';
 
 const Navbar = ({ onOpenTransactionModal }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -102,19 +105,39 @@ const Navbar = ({ onOpenTransactionModal }) => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => {
-                    setUserMenuOpen(false);
-                    logout();
-                  }}
-                  className="w-full flex items-center space-x-2.5 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
+                <div className="py-1">
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      setProfileModalOpen(true);
+                    }}
+                    className="w-full flex items-center space-x-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-colors"
+                  >
+                    <Settings className="w-4 h-4 text-blue-400" />
+                    <span>Preferences & Currency</span>
+                  </button>
+                </div>
+
+                <div className="border-t border-slate-800 pt-1">
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center space-x-2.5 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
+
+          <ProfileModal
+            isOpen={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+          />
 
           {/* Mobile Menu Toggle Button */}
           <button
