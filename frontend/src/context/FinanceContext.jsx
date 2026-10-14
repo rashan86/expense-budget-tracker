@@ -195,14 +195,22 @@ export const FinanceProvider = ({ children }) => {
         responseType: 'blob',
       });
 
-      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const fileName = `transactions_${Date.now()}.pdf`;
+
+      // Trigger file download to Downloads folder
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `transactions_${Date.now()}.pdf`);
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
-      return { success: true };
+
+      // Also automatically open the generated PDF in a new tab for immediate viewing
+      window.open(url, '_blank');
+
+      return { success: true, url, fileName };
     } catch (err) {
       console.error('Export PDF failed:', err);
       return { success: false, error: 'PDF export failed' };
