@@ -451,7 +451,7 @@ const exportPDF = async (req, res, next) => {
     doc.pipe(res);
 
     doc.fillColor('#1E293B').fontSize(20).text('Financial Transactions Report', { align: 'center' });
-    doc.fontSize(10).fillColor('#64748B').text(`Generated on: ${new Date().toLocaleString()} | User: ${req.user.name || 'John Doe'}`, { align: 'center' });
+    doc.fontSize(10).fillColor('#64748B').text(`Generated on: ${new Date().toLocaleString()} | User: ${req.user.name || 'Rashan'}`, { align: 'center' });
     doc.moveDown(1.5);
 
     let totalInc = 0;

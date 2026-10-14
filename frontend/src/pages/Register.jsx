@@ -119,7 +119,7 @@ const Register = () => {
                 <UserIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
                 <input
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Rashan"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl glass-input text-sm"

@@ -13,7 +13,7 @@ const generateToken = (id) => {
 const fallbackUsers = [
   {
     _id: '660f0a1b2c3d4e5f6a7b8c9d',
-    name: 'John Doe',
+    name: 'Rashan',
     email: 'john@example.com',
     password: 'password123',
     currency: '$',
@@ -106,7 +106,7 @@ const loginUser = async (req, res, next) => {
       // Auto-create demo user if john@example.com
       if (!user && normalizedEmail === 'john@example.com' && password === 'password123') {
         user = await User.create({
-          name: 'John Doe',
+          name: 'Rashan',
           email: 'john@example.com',
           password: 'password123',
           currency: '$',
@@ -115,6 +115,10 @@ const loginUser = async (req, res, next) => {
       }
 
       if (user && (await user.matchPassword(password))) {
+        if (user.name === 'John Doe') {
+          user.name = 'Rashan';
+          await user.save();
+        }
         const token = generateToken(user._id);
         return res.json({
           success: true,
@@ -172,6 +176,10 @@ const getMe = async (req, res, next) => {
     if (mongoose.connection.readyState === 1) {
       const user = await User.findById(req.user._id);
       if (user) {
+        if (user.name === 'John Doe') {
+          user.name = 'Rashan';
+          await user.save();
+        }
         return res.json({
           success: true,
           data: {
@@ -189,7 +197,7 @@ const getMe = async (req, res, next) => {
       success: true,
       data: {
         _id: req.user._id || '660f0a1b2c3d4e5f6a7b8c9d',
-        name: req.user.name || 'John Doe',
+        name: req.user.name && req.user.name !== 'John Doe' ? req.user.name : 'Rashan',
         email: req.user.email || 'john@example.com',
         currency: req.user.currency || '$',
       },
@@ -235,7 +243,7 @@ const updateProfile = async (req, res, next) => {
       success: true,
       data: {
         _id: req.user._id,
-        name: req.body.name || req.user.name || 'John Doe',
+        name: req.body.name || req.user.name || 'Rashan',
         email: req.user.email || 'john@example.com',
         currency: req.body.currency || req.user.currency || '$',
         token: generateToken(req.user._id),

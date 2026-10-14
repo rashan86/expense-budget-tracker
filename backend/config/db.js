@@ -51,7 +51,7 @@ const seedDemoData = async () => {
 
     // Create Demo User
     const demoUser = await User.create({
-      name: 'John Doe',
+      name: 'Rashan',
       email: 'john@example.com',
       password: 'password123',
       currency: '$',
