@@ -41,9 +41,9 @@ const ExpenseCategoryChart = ({ transactions = [], currency = '$' }) => {
       {
         data: amounts,
         backgroundColor: colors.slice(0, categories.length),
-        borderColor: '#0F172A',
+        borderColor: 'rgba(12, 18, 34, 0.95)',
         borderWidth: 3,
-        hoverOffset: 6,
+        hoverOffset: 8,
       },
     ],
   };

@@ -49,14 +49,20 @@ const IncomeVsExpenseChart = ({ transactions = [], currency = '$' }) => {
       {
         label: 'Income',
         data: incomeData,
-        backgroundColor: '#10B981',
+        backgroundColor: 'rgba(16, 185, 129, 0.85)',
+        hoverBackgroundColor: '#10B981',
+        borderColor: '#34D399',
+        borderWidth: 1,
         borderRadius: 8,
         barPercentage: 0.6,
       },
       {
         label: 'Expenses',
         data: expenseData,
-        backgroundColor: '#F43F5E',
+        backgroundColor: 'rgba(244, 63, 94, 0.85)',
+        hoverBackgroundColor: '#F43F5E',
+        borderColor: '#FB7185',
+        borderWidth: 1,
         borderRadius: 8,
         barPercentage: 0.6,
       },
@@ -81,12 +87,13 @@ const IncomeVsExpenseChart = ({ transactions = [], currency = '$' }) => {
         },
       },
       tooltip: {
-        backgroundColor: '#1E293B',
+        backgroundColor: 'rgba(15, 23, 42, 0.95)',
         titleColor: '#F8FAFC',
         bodyColor: '#F8FAFC',
-        borderColor: '#334155',
+        borderColor: 'rgba(255, 255, 255, 0.12)',
         borderWidth: 1,
         padding: 12,
+        boxPadding: 6,
         callbacks: {
           label: (context) => {
             const val = context.raw || 0;
@@ -98,14 +105,14 @@ const IncomeVsExpenseChart = ({ transactions = [], currency = '$' }) => {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#64748B', font: { family: 'Plus Jakarta Sans', size: 11 } },
+        ticks: { color: '#94A3B8', font: { family: 'Plus Jakarta Sans', size: 11 } },
       },
       y: {
-        grid: { color: '#334155', strokeDash: [4, 4] },
+        grid: { color: 'rgba(255, 255, 255, 0.06)', strokeDash: [4, 4] },
         ticks: {
-          color: '#64748B',
+          color: '#94A3B8',
           font: { family: 'Plus Jakarta Sans', size: 11 },
-          callback: (val) => `${currency}${val}`,
+          callback: (val) => `${currency}${val.toLocaleString()}`,
         },
       },
     },
