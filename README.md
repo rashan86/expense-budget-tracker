@@ -200,14 +200,5 @@ You can sign in immediately using the auto-fill button on the login screen or en
 
 ---
 
-## 📝 Submission Details Document
-
-Create a separate submission document (PDF or Word) containing only:
-1. **Your Name**
-2. **GitHub Repository Link** (Public)
-3. **Public Google Drive Demo Video Link** (3-5 minutes)
-
----
-
 ## 📄 License
 This project is completed as part of the Software Engineering Module Individual Assignment.
